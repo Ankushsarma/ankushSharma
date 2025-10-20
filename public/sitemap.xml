@@ -4,12 +4,5 @@
     <loc>https://ankushsharma.onrender.com/</loc>
     <priority>1.00</priority>
   </url>
-  <url>
-    <loc>https://ankushsharma.onrender.com/#about</loc>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://ankushsharma.onrender.com/#contact</loc>
-    <priority>0.80</priority>
-  </url>
+  
 </urlset>
