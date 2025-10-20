@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Ankush Kumar - Backend Developer specializing in scalable APIs, microservices, and web server deployment." />
+  <title>Ankush Kumar — Backend Developer</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --dark-blue: #0B132B;
+      --neon-orange: #FF6B00;
+      --pure-white: #FFFFFF;
+      --deep-black: #07070a;
+      --glass: rgba(11,19,43,0.35);
+      --card-radius: 14px;
+      --transition: 0.36s cubic-bezier(.2,.9,.2,1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: var(--deep-black);
+      color: var(--pure-white);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      z-index: 1200; padding: 18px 5%;
+      transition: all var(--transition);
+    }
+    header .nav {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .brand { font-weight: 800; font-size: 1.2rem; color: var(--neon-orange); }
+    nav ul { display: flex; gap: 20px; list-style: none; }
+    nav a { position: relative; font-weight: 500; }
+    nav a::after {
+      content: ""; position: absolute; left: 0; bottom: -6px; height: 2px; width: 0;
+      background: var(--neon-orange); transition: width 0.3s ease;
+    }
+    nav a:hover { color: var(--neon-orange); }
+    nav a:hover::after { width: 100%; }
+
+    /* HERO */
+    #home {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+      padding: 120px 5% 80px;
+      background-image:
+        linear-gradient(to top, var(--dark-blue) 0%, rgba(11,19,43,0.75) 25%, rgba(11,19,43,0.25) 60%, rgba(11,19,43,0.06) 85%, transparent 100%),
+        url('https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?q=80&w=1170&auto=format&fit=crop');
+      background-size: cover; background-position: center;
+      background-attachment: fixed;
+    }
+    .hero { position: relative; z-index: 2; max-width: 1100px; animation: fadeInUp .9s ease both; }
+    .hero h1 { font-size: clamp(2rem, 4.2vw, 3.6rem); font-weight: 800; }
+    .hero h1 .role { color: var(--neon-orange); }
+    .hero p { margin: 16px 0 30px; opacity: 0.95; }
+    .cta { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 22px; border-radius: 999px; font-weight: 700;
+      cursor: pointer; transition: all .28s ease;
+    }
+    .btn-primary { background: var(--neon-orange); color: var(--pure-white); }
+    .btn-primary:hover { background: var(--dark-blue); color: var(--neon-orange); transform: translateY(-4px); }
+    .btn-secondary { border: 2px solid var(--neon-orange); color: var(--neon-orange); }
+    .btn-secondary:hover { background: var(--neon-orange); color: var(--pure-white); transform: translateY(-4px); }
+
+    .scroll-indicator { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); animation: bounce 2s infinite; }
+    .scroll-indicator i { color: var(--neon-orange); font-size: 1.25rem; }
+
+    /* SECTIONS */
+    section { padding: 72px 5%; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; position: relative; padding-left: 14px; }
+    .section-title::before {
+      content: ""; position: absolute; left: 0; top: 8px; width: 6px; height: calc(100% - 16px);
+      background: var(--neon-orange); border-radius: 3px;
+    }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 28px; align-items: center; }
+    .about-card { background: rgba(11,19,43,0.35); border-radius: var(--card-radius); padding: 22px; }
+    .about-text h3 { font-size: 1.4rem; margin-bottom: 10px; padding-left: 10px; border-left: 4px solid var(--neon-orange); }
+    .about-text p { margin-bottom: 10px; opacity: 0.95; }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 18px; }
+    .skill-category { background: rgba(11,19,43,0.28); border-radius: 12px; padding: 18px; transition: all .3s ease; }
+    .skill-category:hover { transform: translateY(-6px); box-shadow: 0 0 12px rgba(255,107,0,0.25); }
+    .skill-category h4 { color: var(--neon-orange); margin-bottom: 12px; }
+    .skill-tag {
+      background: rgba(255,107,0,0.07); padding: 8px 12px; border-radius: 999px;
+      margin: 4px; display: inline-block; transition: all .2s ease;
+    }
+    .skill-tag:hover { background: var(--neon-orange); color: var(--pure-white); transform: translateY(-3px); }
+
+    /* SERVICES */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 18px; }
+    .card {
+      background: rgba(11,19,43,0.35); border-radius: 12px; padding: 20px; transition: all .32s ease;
+    }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 0 20px rgba(255,107,0,0.2); }
+    .card .icon { font-size: 28px; color: var(--neon-orange); margin-bottom: 10px; }
+
+    /* CONTACT */
+    .contact-wrap { max-width: 820px; margin: 0 auto; }
+    .contact-form { background: rgba(11,19,43,0.35); padding: 22px; border-radius: 12px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    label { font-weight: 700; color: var(--neon-orange); margin-bottom: 6px; }
+    input, textarea {
+      width: 100%; padding: 10px; border-radius: 10px;
+      background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.06); color: var(--pure-white);
+    }
+    .submit {
+      width: 100%; padding: 12px; background: var(--neon-orange);
+      color: var(--pure-white); font-weight: 800; border: none; border-radius: 10px; cursor: pointer;
+    }
+    .submit:hover { background: var(--dark-blue); color: var(--neon-orange); }
+
+    /* FOOTER */
+    footer { padding: 34px 5%; background: linear-gradient(180deg,var(--deep-black),rgba(7,7,10,0.95)); border-top: 2px solid var(--neon-orange); text-align: center; }
+    .socials { display: flex; gap: 12px; justify-content: center; margin: 12px 0; }
+    .socials a { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--glass); color: var(--neon-orange); }
+    .socials a:hover { background: var(--neon-orange); color: var(--pure-white); transform: translateY(-6px); }
+
+    /* Back to Top */
+    .back-to-top {
+      position: fixed; right: 28px; bottom: 28px; width: 48px; height: 48px; border-radius: 50%;
+      background: var(--neon-orange); color: var(--pure-white);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: all .3s ease;
+    }
+    .back-to-top.visible { opacity: 1; visibility: visible; }
+
+    /* Animations */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+    @keyframes bounce { 0%,20%,50%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
+    .reveal { opacity: 0; transform: translateY(28px); transition: all .6s cubic-bezier(.2,.9,.2,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+<header id="site-header">
+  <div class="nav container">
+    <div class="brand">Ankush Kumar</div>
+    <nav>
+      <ul id="mainNav">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section id="home">
+  <div class="hero container">
+    <h1>Ankush Sharma — <span class="role">Backend Developer</span></h1>
+    <p>Building Scalable APIs • Microservices • Web Server Deployment</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#contact">Hire Me</a>
+      <a class="btn btn-secondary" href="#skills">View My Work</a>
+    </div>
+  </div>
+  <div class="scroll-indicator"><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+
+<main>
+  <section id="about">
+    <div class="container about-grid reveal">
+      <div class="about-card avatar">
+        <img src="IMG-20250106-WA0041.jpg" alt="Ankush Kumar" />
+      </div>
+      <div class="about-card about-text">
+        <h3>About Me</h3>
+        <p>I'm <strong>Ankush Kumar</strong>, a Backend Developer passionate about building reliable and scalable web applications.</p>
+        <p>I specialize in developing <strong>RESTful APIs</strong>, <strong>microservice-based backends</strong>, and <strong>web server deployments</strong> using Node.js, Express, and MongoDB.</p>
+        <p>I enjoy turning ideas into functional systems and have experience with user authentication, session management, and backend logic design.</p>
+        <p>My toolset includes <strong>Postman</strong>, <strong>Git/GitHub</strong>, <strong>EJS templating</strong>, and <strong>PostgreSQL</strong> for structured data operations.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="container">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-category reveal">
+          <h4>Backend Development</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Express.js</span>
+            <span class="skill-tag">EJS Templating</span>
+            <span class="skill-tag">RESTful APIs</span>
+            <span class="skill-tag">Microservices</span>
+          </div>
+        </div>
+        <div class="skill-category reveal">
+          <h4>Database & API</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">MongoDB</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">API Integration</span>
+            <span class="skill-tag">Data Modeling</span>
+            <span class="skill-tag">GraphQL</span>
+          </div>
+        </div>
+        <div class="skill-category reveal">
+          <h4>Frontend Essentials</h4>
+          <div class="skill-tags">
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">Responsive Design</span>
+            <span class="skill-tag">Basic UI/UX</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">Services</h2>
+      <p class="section-sub">What I can help you build</p>
+      <div class="cards-grid">
+        <div class="card reveal">
+          <div class="icon"><i class="fa-solid fa-server"></i></div>
+          <h4>API Development</h4>
+          <p>Developing secure and scalable RESTful APIs with authentication, validation, and error handling.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon"><i class="fa-solid fa-network-wired"></i></div>
+          <h4>Microservices Development</h4>
+          <p>Designing modular, independent backend services for better scalability and maintainability.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <h4>Web Server Deployment</h4>
+          <p>Deploying and maintaining Node.js applications on cloud or local servers with environment configuration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-sub">Let's build something reliable and scalable together.</p>
+      <div class="contact-wrap">
+    <form class="contact-form reveal" action="/contact" method="POST">
+  <% if (typeof error !== "undefined") { %>
+    <p style="color: red; text-align: center; margin-bottom: 10px;"><%= error %></p>
+  <% } %>
+
+  <% if (typeof success !== "undefined") { %>
+    <p style="color: limegreen; text-align: center; margin-bottom: 10px;"><%= success %></p>
+  <% } %>
+
+  <div class="form-row">
+    <div class="form-control">
+      <label for="name">Name</label>
+      <input id="name" name="name" placeholder="Your name" value="<%= typeof old !== 'undefined' ? old.name : '' %>" required />
+    </div>
+    <div class="form-control">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="you@domain.com" value="<%= typeof old !== 'undefined' ? old.email : '' %>" required />
+    </div>
+  </div>
+
+  <div class="form-control">
+    <label for="message">Message</label>
+    <textarea id="message" name="message" placeholder="Tell me about the project..." rows="6" required><%= typeof old !== 'undefined' ? old.message : '' %></textarea>
+  </div>
+
+  <button class="submit" type="submit">Send message</button>
+</form>
+
+
+        <div style="text-align:center;margin-top:18px" class="reveal">
+          <div class="socials">
+            <a href="https://github.com/Ankushsarma" title="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/ankush-kumar-a467852a7/" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          </div>
+          <p style="color:rgba(255,255,255,0.7)">Prefer email? <a href="sharmaankush8854@gmail.com" style="color:var(--neon-orange)">sharmaankush8854@gmail.com</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>© <strong>Ankush Kumar</strong> — Backend Developer</div>
+    <div style="font-size:.95rem;color:rgba(255,255,255,0.8)">Focused on APIs, microservices, and web server deployments.</div>
+  </div>
+</footer>
+
+<button id="backTop" class="back-to-top"><i class="fa-solid fa-chevron-up"></i></button>
+
+<script>
+  // Reveal on scroll
+  (function(){
+    const reveals=document.querySelectorAll('.reveal');
+    if('IntersectionObserver' in window){
+      const obs=new IntersectionObserver((entries,o)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target);}
+        });
+      },{threshold:0.12});
+      reveals.forEach(r=>obs.observe(r));
+    } else reveals.forEach(r=>r.classList.add('visible'));
+  })();
+
+  // Header scroll & back to top
+  (function(){
+    const header=document.getElementById('site-header');
+    const backTop=document.getElementById('backTop');
+    window.addEventListener('scroll',()=>{
+      if(window.scrollY>20){
+        header.style.background='rgba(11,19,43,0.92)';
+        header.style.boxShadow='0 8px 30px rgba(255,107,0,0.06)';
+      } else {
+        header.style.background='transparent'; header.style.boxShadow='none';
+      }
+      if(window.scrollY>600) backTop.classList.add('visible'); else backTop.classList.remove('visible');
+    });
+  })();
+  document.getElementById('backTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+</script>
+</body>
+</html>
