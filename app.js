@@ -7,6 +7,7 @@ dotenv.config();
 
 const app = express();
 const mongoURL = process.env.MONGO_URL ;
+const localURL = 'mongodb://127.0.0.1:27017/mydb';
 // ===== Middleware =====
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -15,7 +16,7 @@ app.use(express.static("public")); // serve your images, css, js etc. from publi
 app.set("view engine", "ejs");
 
 // --- Mongoose Connection ---
-mongoose.connect(mongoURL, { serverSelectionTimeoutMS: 5000 })
+mongoose.connect(mongoURL || localURL , { serverSelectionTimeoutMS: 5000 })
   .then(() => console.log('✅ Database connected'))
   .catch(err => {
     console.error('❌ Database connection error:', err);
