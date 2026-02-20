@@ -1,6 +1,6 @@
 // server.js
 import express from "express";
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -30,11 +30,24 @@ const contactSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+const projectSchema = new mongoose.Schema({
+  title:{type:String,require:true,unique:true},
+  discription:{type:String,require:true},
+  img:[String],
+  link:{type:String,require:true}
+})
+
+const Projects=mongoose.model("Projects",projectSchema);
 const Contact = mongoose.model("Contact", contactSchema);
 
 // ===== Routes =====
-app.get("/", (req, res) => {
-  res.render("index", { success: undefined, error: undefined, old: {} });
+app.get("/", async (req, res) => {
+
+  const projects = await Projects.find();
+  
+
+
+  res.render("index", { success: undefined, error: undefined, old: {} ,projects:projects});
 });
 
 app.post("/contact", async (req, res) => {

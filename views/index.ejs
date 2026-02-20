@@ -677,6 +677,208 @@
             box-shadow: 0 4px 12px rgba(255,107,0,0.3);
         }
 
+        /* ─── PROJECTS ─── */
+        #projects {
+            background: linear-gradient(180deg, var(--deep-black) 0%, var(--dark-blue) 50%, var(--deep-black) 100%);
+            position: relative;
+        }
+
+        #projects::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-orange), transparent);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+            margin-top: 40px;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            padding: 0;
+            overflow: hidden;
+            transition: all .35s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px var(--border-hover);
+        }
+
+        /* Project images grid */
+        .project-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .project-images.single-image {
+            grid-template-columns: 1fr;
+        }
+
+        .project-images.three-images {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .project-images.many-images {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+        }
+
+        .project-image-wrapper {
+            position: relative;
+            aspect-ratio: 16/10;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .project-image-wrapper:hover {
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        .project-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.4s ease;
+        }
+
+        .project-image-wrapper:hover img {
+            transform: scale(1.1);
+        }
+
+        /* More images indicator */
+        .more-images-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--off-white);
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-image-wrapper.has-more:hover .more-images-overlay {
+            opacity: 1;
+        }
+
+        /* Project content */
+        .project-content {
+            padding: 24px 26px;
+        }
+
+        .project-card h3 {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--off-white);
+            letter-spacing: -0.02em;
+        }
+
+        .project-card p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .project-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+
+        .project-link span {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .project-link a {
+            color: var(--neon-orange);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: var(--orange-soft);
+            border: 1px solid var(--border);
+        }
+
+        .project-link a::after {
+            content: '→';
+            font-size: 1rem;
+            transition: transform 0.2s ease;
+        }
+
+        .project-link a:hover {
+            background: var(--neon-orange);
+            color: var(--pure-white);
+            border-color: var(--neon-orange);
+            transform: translateX(2px);
+        }
+
+        .project-link a:hover::after {
+            transform: translateX(3px);
+        }
+
+        /* No images fallback */
+        .project-card .no-images {
+            width: 100%;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255,107,0,0.08) 0%, rgba(11,19,43,0.5) 100%);
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile adjustments for projects */
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            .project-images.three-images,
+            .project-images.many-images {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-images {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
         /* ─── SERVICES ─── */
         #services {
             background: linear-gradient(180deg, var(--deep-black) 0%, var(--dark-blue) 100%);
@@ -1081,6 +1283,7 @@
             nav.open li:nth-child(3) a { transition-delay: 0.15s; }
             nav.open li:nth-child(4) a { transition-delay: 0.20s; }
             nav.open li:nth-child(5) a { transition-delay: 0.25s; }
+            nav.open li:nth-child(6) a { transition-delay: 0.30s; }
 
             /* Nav overlay */
             .nav-overlay {
@@ -1236,6 +1439,7 @@
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#skills">Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
@@ -1365,6 +1569,60 @@
             </div>
         </section>
 
+        <section id="projects">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag">What I've built</span>
+                    <h2 class="section-title">Projects</h2>
+                    <p class="section-sub">Recent work and personal projects</p>
+                </div>
+                <div class="projects-grid">
+                    <% projects.forEach((project, projectIndex) => { %>
+                        <div class="project-card reveal">
+                            <% if (project.img && project.img.length > 0) { %>
+                                <%
+                                    let gridClass = '';
+                                    if (project.img.length === 1) gridClass = 'single-image';
+                                    else if (project.img.length === 3) gridClass = 'three-images';
+                                    else if (project.img.length > 3) gridClass = 'many-images';
+                                    
+                                    const displayImages = project.img.slice(0, 6);
+                                    const remainingCount = project.img.length - 6;
+                                %>
+                                <div class="project-images <%= gridClass %>">
+                                    <% displayImages.forEach((img, imgIndex) => { %>
+                                        <div class="project-image-wrapper <%= (imgIndex === 5 && remainingCount > 0) ? 'has-more' : '' %>">
+                                            <img src="<%= img %>" alt="<%= project.title %> screenshot <%= imgIndex + 1 %>" loading="lazy">
+                                            <% if (imgIndex === 5 && remainingCount > 0) { %>
+                                                <div class="more-images-overlay">
+                                                    +<%= remainingCount %>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            <% } else { %>
+                                <div class="no-images">
+                                    <i class="fa-solid fa-image" style="margin-right:8px;opacity:0.5;"></i>
+                                    No preview available
+                                </div>
+                            <% } %>
+                            <div class="project-content">
+                                <h3><%= project.title %></h3>
+                                <p><%= project.discription %></p>
+                                <div class="project-link">
+                                    <span>GitHub:</span>
+                                    <a href="<%= project.link %>" target="_blank" rel="noopener noreferrer">
+                                        View Code
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+
         <section id="services">
             <div class="container">
                 <div class="section-header reveal">
@@ -1442,7 +1700,7 @@
                             <a href="https://github.com/Ankushsarma" title="GitHub"><i class="fa-brands fa-github"></i></a>
                             <a href="https://www.linkedin.com/in/ankush-kumar-a467852a7/" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
                         </div>
-                        <p style="color:var(--text-muted);font-size:0.9rem;">Prefer email? <a href="mailto:sharmaankush8854@gmail.com" style="color:var(--neon-orange)">sharmaankush8854@gmail.com</a></p>
+                        <p style="color:var(--text-muted);font-size:0.9rem;">Prefer email? <a href="/cdn-cgi/l/email-protection#bac9d2dbc8d7dbdbd4d1cfc9d282828f8efaddd7dbd3d694d9d5d7" style="color:var(--neon-orange)"><span class="__cf_email__" data-cfemail="7a09121b08171b1b14110f091242424f4e3a1d171b131654191517">[email&#160;protected]</span></a></p>
                     </div>
                 </div>
             </div>
@@ -1463,7 +1721,7 @@
 
     <button id="backTop" class="back-to-top" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // ─── Scroll progress bar ───
         const scrollProgress = document.getElementById('scrollProgress');
         function updateProgress() {
@@ -1683,4 +1941,3 @@
 </body>
 
 </html>
-
