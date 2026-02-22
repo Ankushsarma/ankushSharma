@@ -79,6 +79,20 @@ app.post("/contact", async (req, res) => {
   }
 });
 
+app.get("/admin-panel", async(req,res)=>{
+  const messages= await Contact.find();
+  res.render("admin" ,{messages:messages})
+  
+})
+
+app.post("/admin-panel", async (req, res) => {
+  const { name, description, imgurl } = req.body;
+
+  console.log(req.body);
+
+  res.send("Project received");
+});
+
 // ===== Start Server =====
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
