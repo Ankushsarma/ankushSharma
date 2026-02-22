@@ -88,7 +88,9 @@ app.get("/admin-panel", async(req,res)=>{
 app.post("/admin-panel", async (req, res) => {
   const { name, description, imgurl } = req.body;
 
-  console.log(req.body);
+  const project = await Contact.create({
+    ...req.body,
+  })
 
   res.send("Project received");
 });
