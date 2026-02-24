@@ -16,7 +16,7 @@ app.use(express.static("public")); // serve your images, css, js etc. from publi
 app.set("view engine", "ejs");
 
 // --- Mongoose Connection ---
-mongoose.connect(mongoURL || localURL , { serverSelectionTimeoutMS: 5000 })
+mongoose.connect(mongoURL  , { serverSelectionTimeoutMS: 5000 })
   .then(() => console.log('✅ Database connected'))
   .catch(err => {
     console.error('❌ Database connection error:', err);
