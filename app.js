@@ -7,6 +7,7 @@ dotenv.config();
 
 const app = express();
 const mongoURL = process.env.MONGO_URL ;
+
 const localURL = 'mongodb://127.0.0.1:27017/mydb';
 // ===== Middleware =====
 app.use(express.urlencoded({ extended: true }));
@@ -31,10 +32,9 @@ const contactSchema = new mongoose.Schema({
 });
 
 const projectSchema = new mongoose.Schema({
-  title:{type:String,require:true,unique:true},
-  discription:{type:String,require:true},
-  img:[String],
-  link:{type:String,require:true}
+  projectname:{type:String,required:true,unique:true},
+  description:{type:String,required:true},
+  urls:[String],
 })
 
 const Projects=mongoose.model("Projects",projectSchema);
@@ -86,13 +86,17 @@ app.get("/admin-panel", async(req,res)=>{
 })
 
 app.post("/admin-panel", async (req, res) => {
-  const { name, description, imgurl } = req.body;
+  const { projectname, description, urls } = req.body;
+  console.log(req.body);
+  
+  const project = await Projects.create({
+    projectname: projectname.trim(),
+    description: description.trim(),
 
-  const project = await Contact.create({
-    ...req.body,
+    urls: Array.isArray(urls) ? urls : [urls]
   })
 
-  res.send("Project received");
+  res.redirect("/");
 });
 
 // ===== Start Server =====
