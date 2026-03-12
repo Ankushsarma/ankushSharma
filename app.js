@@ -1,12 +1,13 @@
 // server.js
 import express from "express";
 import mongoose, { Schema } from "mongoose";
+import session from "express-session";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
-const mongoURL = process.env.MONGO_URL ;
+const mongoURL = process.env.MONGO_URL;
 
 const localURL = 'mongodb://127.0.0.1:27017/mydb';
 // ===== Middleware =====
@@ -16,8 +17,27 @@ app.use(express.static("public")); // serve your images, css, js etc. from publi
 
 app.set("view engine", "ejs");
 
+// ===== Session =====
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'fallback-secret-change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24, // 24 hours
+    httpOnly: true,
+  }
+}));
+
+// ===== Auth Middleware =====
+function requireAuth(req, res, next) {
+  if (req.session && req.session.isAdmin) {
+    return next();
+  }
+  return res.redirect('/login');
+}
+
 // --- Mongoose Connection ---
-mongoose.connect(mongoURL  , { serverSelectionTimeoutMS: 5000 })
+mongoose.connect(mongoURL, { serverSelectionTimeoutMS: 5000 })
   .then(() => console.log('✅ Database connected'))
   .catch(err => {
     console.error('❌ Database connection error:', err);
@@ -32,22 +52,24 @@ const contactSchema = new mongoose.Schema({
 });
 
 const projectSchema = new mongoose.Schema({
-  projectname:{type:String,required:true,unique:true},
-  description:{type:String,required:true},
-  urls:[String],
+  projectname: { type: String, required: true, unique: true },
+  description: { type: String, required: true },
+  urls: [String],
+  githubLink: { type: String, trim: true, default: '' },
+  workingLink: { type: String, trim: true, default: '' },
 })
 
-const Projects=mongoose.model("Projects",projectSchema);
+const Projects = mongoose.model("Projects", projectSchema);
 const Contact = mongoose.model("Contact", contactSchema);
 
 // ===== Routes =====
 app.get("/", async (req, res) => {
 
   const projects = await Projects.find();
-  
 
 
-  res.render("index", { success: undefined, error: undefined, old: {} ,projects:projects});
+
+  res.render("index", { success: undefined, error: undefined, old: {}, projects: projects });
 });
 
 app.post("/contact", async (req, res) => {
@@ -79,24 +101,53 @@ app.post("/contact", async (req, res) => {
   }
 });
 
-app.get("/admin-panel", async(req,res)=>{
-  const messages= await Contact.find();
-  res.render("admin" ,{messages:messages})
-  
+// ===== Auth Routes =====
+app.get("/login", (req, res) => {
+  if (req.session && req.session.isAdmin) {
+    return res.redirect('/admin-panel');
+  }
+  res.render("login", { error: undefined });
+});
+
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  const adminUser = process.env.ADMIN_USERNAME || 'admin';
+  const adminPass = process.env.ADMIN_PASSWORD || 'admin123';
+
+  if (username === adminUser && password === adminPass) {
+    req.session.isAdmin = true;
+    return res.redirect('/admin-panel');
+  }
+
+  res.render("login", { error: "Invalid username or password" });
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) console.error('Session destroy error:', err);
+    res.redirect('/login');
+  });
+});
+
+// ===== Admin Routes (Protected) =====
+app.get("/admin-panel", requireAuth, async (req, res) => {
+  const messages = await Contact.find();
+  res.render("admin", { messages: messages })
 })
 
-app.post("/admin-panel", async (req, res) => {
-  const { projectname, description, urls } = req.body;
+app.post("/admin-panel", requireAuth, async (req, res) => {
+  const { projectname, description, urls, githubLink, workingLink } = req.body;
   console.log(req.body);
-  
+
   const project = await Projects.create({
     projectname: projectname.trim(),
     description: description.trim(),
-
-    urls: Array.isArray(urls) ? urls : [urls]
+    urls: urls ? [urls.trim()].filter(u => u.length > 0) : [],
+    githubLink: githubLink ? githubLink.trim() : '',
+    workingLink: workingLink ? workingLink.trim() : '',
   })
 
-  res.redirect("/");
+  res.redirect("/admin-panel");
 });
 
 // ===== Start Server =====

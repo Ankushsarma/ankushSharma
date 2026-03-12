@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Admin Panel — Ankush Kumar</title>
 
-    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&f[]=satoshi@300,400,500&display=swap" rel="stylesheet">
+    <link
+        href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&f[]=satoshi@300,400,500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -27,8 +29,17 @@
             --transition: 0.38s cubic-bezier(.2, .9, .2, 1);
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: 'Satoshi', system-ui, sans-serif;
@@ -39,7 +50,10 @@
             min-height: 100vh;
         }
 
-        a { color: inherit; text-decoration: none; }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
 
         /* ─── NOISE OVERLAY ─── */
         body::before {
@@ -55,7 +69,8 @@
         /* ─── SCROLL PROGRESS ─── */
         .scroll-progress {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             height: 2px;
             width: 0%;
             background: linear-gradient(90deg, var(--neon-orange), #ff9d4d);
@@ -66,7 +81,8 @@
         /* ─── HEADER ─── */
         header {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             z-index: 1200;
             padding: 22px 5%;
@@ -74,7 +90,7 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--border);
-            box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
         }
 
         header .nav-inner {
@@ -97,7 +113,8 @@
         }
 
         .brand-dot {
-            width: 7px; height: 7px;
+            width: 7px;
+            height: 7px;
             background: var(--neon-orange);
             border-radius: 50%;
             display: inline-block;
@@ -105,8 +122,17 @@
         }
 
         @keyframes pulse-dot {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.6); opacity: 0.5; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.6);
+                opacity: 0.5;
+            }
         }
 
         .header-badge {
@@ -136,7 +162,9 @@
         }
 
         @media (max-width: 900px) {
-            .admin-wrapper { grid-template-columns: 1fr; }
+            .admin-wrapper {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* ─── PAGE HEADING ─── */
@@ -198,12 +226,16 @@
         .panel::before {
             content: '';
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 2px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
             background: linear-gradient(90deg, var(--neon-orange), transparent);
         }
 
-        .panel:hover { border-color: var(--border-hover); }
+        .panel:hover {
+            border-color: var(--border-hover);
+        }
 
         .panel-title {
             font-family: 'Cabinet Grotesk', sans-serif;
@@ -217,7 +249,8 @@
         }
 
         .panel-title .panel-icon {
-            width: 38px; height: 38px;
+            width: 38px;
+            height: 38px;
             background: var(--orange-soft);
             border-radius: 10px;
             display: flex;
@@ -246,7 +279,8 @@
             color: var(--text-muted);
         }
 
-        input, textarea {
+        input,
+        textarea {
             width: 100%;
             padding: 12px 16px;
             border-radius: 12px;
@@ -259,17 +293,22 @@
             transition: all 0.25s ease;
         }
 
-        input:focus, textarea:focus {
+        input:focus,
+        textarea:focus {
             border-color: rgba(255, 107, 0, 0.45);
             background: rgba(0, 0, 0, 0.6);
-            box-shadow: 0 0 0 3px rgba(255,107,0,0.08);
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.08);
         }
 
-        input::placeholder, textarea::placeholder {
-            color: rgba(240,237,232,0.3);
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(240, 237, 232, 0.3);
         }
 
-        textarea { resize: vertical; min-height: 90px; }
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
 
         .submit {
             width: 100%;
@@ -286,7 +325,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(255,107,0,0.25);
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.25);
             margin-top: 8px;
             display: flex;
             align-items: center;
@@ -296,26 +335,38 @@
         }
 
         @keyframes btn-breathe {
-            0%, 100% { box-shadow: 0 4px 24px rgba(255,107,0,0.30), 0 0 0 0 rgba(255,107,0,0.15); }
-            50%       { box-shadow: 0 4px 24px rgba(255,107,0,0.45), 0 0 0 10px rgba(255,107,0,0); }
+
+            0%,
+            100% {
+                box-shadow: 0 4px 24px rgba(255, 107, 0, 0.30), 0 0 0 0 rgba(255, 107, 0, 0.15);
+            }
+
+            50% {
+                box-shadow: 0 4px 24px rgba(255, 107, 0, 0.45), 0 0 0 10px rgba(255, 107, 0, 0);
+            }
         }
 
         .submit::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
             transform: translateX(-100%);
             transition: transform 0.5s ease;
         }
 
         .submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(255,107,0,0.4);
+            box-shadow: 0 8px 32px rgba(255, 107, 0, 0.4);
         }
 
-        .submit:hover::before { transform: translateX(100%); }
-        .submit:active { transform: translateY(0); }
+        .submit:hover::before {
+            transform: translateX(100%);
+        }
+
+        .submit:active {
+            transform: translateY(0);
+        }
 
         /* ─── MESSAGES TABLE ─── */
         .messages-panel {
@@ -357,7 +408,9 @@
         .message-card::before {
             content: '';
             position: absolute;
-            left: 0; top: 0; bottom: 0;
+            left: 0;
+            top: 0;
+            bottom: 0;
             width: 3px;
             background: var(--neon-orange);
             border-radius: 2px 0 0 2px;
@@ -371,7 +424,9 @@
             transform: translateX(4px);
         }
 
-        .message-card:hover::before { opacity: 1; }
+        .message-card:hover::before {
+            opacity: 1;
+        }
 
         .message-header {
             display: flex;
@@ -389,7 +444,8 @@
         }
 
         .sender-avatar {
-            width: 34px; height: 34px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background: var(--orange-soft);
             border: 1px solid var(--border);
@@ -472,7 +528,8 @@
 
         .particle {
             position: absolute;
-            width: 2px; height: 2px;
+            width: 2px;
+            height: 2px;
             border-radius: 50%;
             background: var(--neon-orange);
             opacity: 0;
@@ -480,16 +537,36 @@
         }
 
         @keyframes float-particle {
-            0%   { opacity: 0; transform: translateY(0) scale(1); }
-            10%  { opacity: 0.6; }
-            90%  { opacity: 0.3; }
-            100% { opacity: 0; transform: translateY(-100vh) scale(0.4); }
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(1);
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(0.4);
+            }
         }
 
         /* ─── ANIMATIONS ─── */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: none; }
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
         }
 
         /* ─── RIPPLE ─── */
@@ -503,14 +580,27 @@
         }
 
         @keyframes ripple-anim {
-            to { transform: scale(4); opacity: 0; }
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
         }
 
         /* ─── MOBILE ─── */
         @media (max-width: 600px) {
-            .admin-wrapper { padding: 100px 4% 60px; gap: 20px; }
-            .panel { padding: 22px 18px; }
-            .message-body { padding-left: 0; margin-top: 10px; }
+            .admin-wrapper {
+                padding: 100px 4% 60px;
+                gap: 20px;
+            }
+
+            .panel {
+                padding: 22px 18px;
+            }
+
+            .message-body {
+                padding-left: 0;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -560,11 +650,22 @@
                 </div>
                 <div class="form-control">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" placeholder="Brief description of the project..." required></textarea>
+                    <textarea id="description" name="description" placeholder="Brief description of the project..."
+                        required></textarea>
                 </div>
                 <div class="form-control">
                     <label for="urls">Image URL</label>
                     <input id="urls" name="urls" type="text" placeholder="https://example.com/image.png" />
+                </div>
+                <div class="form-control">
+                    <label for="githubLink">GitHub Link</label>
+                    <input id="githubLink" name="githubLink" type="text" placeholder="https://github.com/user/repo"
+                        required />
+                </div>
+                <div class="form-control">
+                    <label for="workingLink">Working Link <span
+                            style="font-size:0.65rem;opacity:0.5;text-transform:none;letter-spacing:0;">(optional)</span></label>
+                    <input id="workingLink" name="workingLink" type="text" placeholder="https://myproject.com" />
                 </div>
                 <button class="submit" type="submit">
                     <i class="fa-solid fa-plus"></i>
@@ -580,32 +681,44 @@
                 Quick Stats
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;">
-                <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;">
-                    <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:2rem;font-weight:800;color:var(--neon-orange);line-height:1;">
+                <div
+                    style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;">
+                    <div
+                        style="font-family:'Cabinet Grotesk',sans-serif;font-size:2rem;font-weight:800;color:var(--neon-orange);line-height:1;">
                         <%= messages ? messages.length : 0 %>
                     </div>
-                    <div style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:6px;">Messages</div>
+                    <div
+                        style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:6px;">
+                        Messages</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;">
-                    <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:2rem;font-weight:800;color:var(--neon-orange);line-height:1;">
+                <div
+                    style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;">
+                    <div
+                        style="font-family:'Cabinet Grotesk',sans-serif;font-size:2rem;font-weight:800;color:var(--neon-orange);line-height:1;">
                         ∞
                     </div>
-                    <div style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:6px;">Projects</div>
+                    <div
+                        style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:6px;">
+                        Projects</div>
                 </div>
             </div>
 
             <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);">
-                <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;">Quick Links</div>
+                <div
+                    style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;">
+                    Quick Links</div>
                 <div style="display:flex;flex-direction:column;gap:8px;">
-                    <a href="/" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-size:0.88rem;font-weight:500;transition:all 0.22s ease;"
-                       onmouseover="this.style.borderColor='rgba(255,107,0,0.35)';this.style.color='var(--off-white)';"
-                       onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)';">
+                    <a href="/"
+                        style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-size:0.88rem;font-weight:500;transition:all 0.22s ease;"
+                        onmouseover="this.style.borderColor='rgba(255,107,0,0.35)';this.style.color='var(--off-white)';"
+                        onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)';">
                         <i class="fa-solid fa-house" style="color:var(--neon-orange);font-size:0.85rem;"></i>
                         View Portfolio
                     </a>
-                    <a href="/logout" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-size:0.88rem;font-weight:500;transition:all 0.22s ease;"
-                       onmouseover="this.style.borderColor='rgba(255,50,50,0.35)';this.style.color='#ff7070';"
-                       onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)';">
+                    <a href="/logout"
+                        style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-size:0.88rem;font-weight:500;transition:all 0.22s ease;"
+                        onmouseover="this.style.borderColor='rgba(255,50,50,0.35)';this.style.color='#ff7070';"
+                        onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)';">
                         <i class="fa-solid fa-right-from-bracket" style="color:#ff7070;font-size:0.85rem;"></i>
                         Logout
                     </a>
@@ -618,14 +731,16 @@
             <div class="panel-title">
                 <div class="panel-icon"><i class="fa-solid fa-envelope"></i></div>
                 Inbox
-                <% if (messages && messages.length > 0) { %>
-                    <span class="messages-count"><%= messages.length %></span>
-                <% } %>
+                <% if (messages && messages.length> 0) { %>
+                    <span class="messages-count">
+                        <%= messages.length %>
+                    </span>
+                    <% } %>
             </div>
 
-            <% if (messages && messages.length > 0) { %>
+            <% if (messages && messages.length> 0) { %>
                 <div class="messages-list">
-                    <% messages.forEach((message) => { %>
+                    <% messages.forEach((message)=> { %>
                         <div class="message-card">
                             <div class="message-header">
                                 <div class="message-sender">
@@ -633,8 +748,12 @@
                                         <%= message.name ? message.name.charAt(0).toUpperCase() : '?' %>
                                     </div>
                                     <div class="sender-info">
-                                        <div class="name"><%= message.name %></div>
-                                        <div class="email"><%= message.email %></div>
+                                        <div class="name">
+                                            <%= message.name %>
+                                        </div>
+                                        <div class="email">
+                                            <%= message.email %>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -642,14 +761,14 @@
                                 <%= message.message %>
                             </div>
                         </div>
-                    <% }) %>
+                        <% }) %>
                 </div>
-            <% } else { %>
-                <div class="no-messages">
-                    <i class="fa-regular fa-envelope-open"></i>
-                    <p>No messages yet.<br>When someone contacts you, it'll show up here.</p>
-                </div>
-            <% } %>
+                <% } else { %>
+                    <div class="no-messages">
+                        <i class="fa-regular fa-envelope-open"></i>
+                        <p>No messages yet.<br>When someone contacts you, it'll show up here.</p>
+                    </div>
+                    <% } %>
         </div>
 
     </div>
@@ -685,12 +804,12 @@
 
         // Ripple effect
         document.querySelectorAll('.submit').forEach(el => {
-            el.addEventListener('pointerdown', function(e) {
+            el.addEventListener('pointerdown', function (e) {
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height) * 2;
                 const ripple = document.createElement('span');
                 ripple.className = 'ripple';
-                ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;`;
+                ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px;`;
                 this.appendChild(ripple);
                 setTimeout(() => ripple.remove(), 600);
             });

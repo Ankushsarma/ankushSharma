@@ -1839,6 +1839,29 @@
                                             <%= project.description %>
                                         </p>
 
+                                        <div class="project-links"
+                                            style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+                                            <% if(project.githubLink && project.githubLink.trim() !=='' ) { %>
+                                                <a href="<%= project.githubLink %>" target="_blank"
+                                                    rel="noopener noreferrer" class="project-link-btn"
+                                                    style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,107,0,0.3);background:rgba(255,107,0,0.06);color:var(--neon-orange);font-size:0.82rem;font-weight:600;transition:all 0.25s ease;text-decoration:none;"
+                                                    onmouseover="this.style.background='var(--neon-orange)';this.style.color='#fff'"
+                                                    onmouseout="this.style.background='rgba(255,107,0,0.06)';this.style.color='var(--neon-orange)'">
+                                                    <i class="fa-brands fa-github"></i> Source Code
+                                                </a>
+                                                <% } %>
+                                                    <% if(project.workingLink && project.workingLink.trim() !=='' ) { %>
+                                                        <a href="<%= project.workingLink %>" target="_blank"
+                                                            rel="noopener noreferrer" class="project-link-btn"
+                                                            style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--neon-orange);color:#fff;font-size:0.82rem;font-weight:600;transition:all 0.25s ease;text-decoration:none;border:1px solid var(--neon-orange);"
+                                                            onmouseover="this.style.background='transparent';this.style.color='var(--neon-orange)'"
+                                                            onmouseout="this.style.background='var(--neon-orange)';this.style.color='#fff'">
+                                                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
+                                                            Demo
+                                                        </a>
+                                                        <% } %>
+                                        </div>
+
                                     </div>
 
                         </div>
