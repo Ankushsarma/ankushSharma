@@ -131,23 +131,73 @@ app.get("/logout", (req, res) => {
 
 // ===== Admin Routes (Protected) =====
 app.get("/admin-panel", requireAuth, async (req, res) => {
-  const messages = await Contact.find();
-  res.render("admin", { messages: messages })
-})
+  try {
+    const messages = await Contact.find().sort({ createdAt: -1 });
+    const projects = await Projects.find().sort({ _id: -1 });
+    res.render("admin", { messages, projects });
+  } catch (err) {
+    console.error("❌ Error fetching admin data:", err);
+    res.render("admin", { messages: [], projects: [], error: "Failed to fetch data." });
+  }
+});
 
 app.post("/admin-panel", requireAuth, async (req, res) => {
-  const { projectname, description, urls, githubLink, workingLink } = req.body;
-  console.log(req.body);
+  try {
+    const { projectname, description, urls, githubLink, workingLink } = req.body;
 
-  const project = await Projects.create({
-    projectname: projectname.trim(),
-    description: description.trim(),
-    urls: urls ? [urls.trim()].filter(u => u.length > 0) : [],
-    githubLink: githubLink ? githubLink.trim() : '',
-    workingLink: workingLink ? workingLink.trim() : '',
-  })
+    await Projects.create({
+      projectname: projectname.trim(),
+      description: description.trim(),
+      urls: urls ? [urls.trim()].filter(u => u.length > 0) : [],
+      githubLink: githubLink ? githubLink.trim() : '',
+      workingLink: workingLink ? workingLink.trim() : '',
+    });
 
-  res.redirect("/admin-panel");
+    res.redirect("/admin-panel");
+  } catch (err) {
+    console.error("❌ Error creating project:", err);
+    res.redirect("/admin-panel?error=creation_failed");
+  }
+});
+
+// Update Project
+app.post("/admin-panel/update/:id", requireAuth, async (req, res) => {
+  try {
+    const { projectname, description, urls, githubLink, workingLink } = req.body;
+    await Projects.findByIdAndUpdate(req.params.id, {
+      projectname: projectname.trim(),
+      description: description.trim(),
+      urls: urls ? [urls.trim()].filter(u => u.length > 0) : [],
+      githubLink: githubLink ? githubLink.trim() : '',
+      workingLink: workingLink ? workingLink.trim() : '',
+    });
+    res.redirect("/admin-panel");
+  } catch (err) {
+    console.error("❌ Error updating project:", err);
+    res.redirect("/admin-panel?error=update_failed");
+  }
+});
+
+// Delete Project
+app.post("/admin-panel/delete-project/:id", requireAuth, async (req, res) => {
+  try {
+    await Projects.findByIdAndDelete(req.params.id);
+    res.redirect("/admin-panel");
+  } catch (err) {
+    console.error("❌ Error deleting project:", err);
+    res.redirect("/admin-panel");
+  }
+});
+
+// Delete Message
+app.post("/admin-panel/delete-message/:id", requireAuth, async (req, res) => {
+  try {
+    await Contact.findByIdAndDelete(req.params.id);
+    res.redirect("/admin-panel");
+  } catch (err) {
+    console.error("❌ Error deleting message:", err);
+    res.redirect("/admin-panel");
+  }
 });
 
 // ===== Start Server =====

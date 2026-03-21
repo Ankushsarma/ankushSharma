@@ -223,6 +223,33 @@
 
         nav a.active {
             color: var(--neon-orange);
+            position: relative;
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            border-radius: 999px;
+            background: var(--neon-orange);
+            box-shadow: 0 0 8px rgba(255, 107, 0, 0.6);
+            animation: navDotPop 0.3s ease both;
+        }
+
+        @keyframes navDotPop {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+
+            to {
+                width: 20px;
+                opacity: 1;
+            }
         }
 
         /* ─── HERO ─── */
@@ -313,6 +340,34 @@
             height: 3px;
             background: linear-gradient(90deg, var(--neon-orange), transparent);
             border-radius: 2px;
+        }
+
+        /* ─── TYPING ANIMATION ─── */
+        .typing-wrapper {
+            display: inline-block;
+            min-height: 1.6em;
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.4s ease both;
+        }
+
+        .typing-text {
+            color: var(--neon-orange);
+            font-weight: 600;
+            border-right: 2px solid var(--neon-orange);
+            padding-right: 4px;
+            animation: blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+
+            0%,
+            100% {
+                border-color: var(--neon-orange);
+            }
+
+            50% {
+                border-color: transparent;
+            }
         }
 
         .hero-desc {
@@ -756,9 +811,9 @@
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 28px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+            gap: 30px;
+            margin-top: 48px;
         }
 
         .project-card {
@@ -767,22 +822,72 @@
             border-radius: var(--card-radius);
             padding: 0;
             overflow: hidden;
-            transition: all .35s ease;
+            transition: all .4s cubic-bezier(.2, .8, .2, 1);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-orange), #ff9d4d, transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+            z-index: 1;
         }
 
         .project-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-8px);
             border-color: var(--border-hover);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-hover);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border-hover), 0 0 30px rgba(255, 107, 0, 0.08);
         }
 
-        /* Project images grid */
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Project images gallery */
         .project-images {
             width: 100%;
-            height: 220px;
-            overflow: hidden;
+            height: 240px;
+            display: grid;
+            gap: 2px;
+            background: var(--border);
             border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .project-images.one-image {
+            grid-template-columns: 1fr;
+        }
+
+        .project-images.two-images {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .project-images.three-images {
+            grid-template-columns: 1.5fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .project-images.three-images .project-image-wrapper:first-child {
+            grid-row: span 2;
+        }
+
+        .project-images.many-images {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .project-images.many-images .project-image-wrapper:first-child {
+            grid-column: span 2;
         }
 
         .project-image-wrapper {
@@ -895,25 +1000,56 @@
         /* No images fallback */
         .project-card .no-images {
             width: 100%;
-            aspect-ratio: 16/9;
+            height: 240px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.08) 0%, rgba(11, 19, 43, 0.5) 100%);
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.06) 0%, rgba(11, 19, 43, 0.6) 50%, rgba(255, 107, 0, 0.03) 100%);
             border-bottom: 1px solid var(--border);
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card .no-images i {
+            font-size: 2rem;
+            opacity: 0.3;
+            color: var(--neon-orange);
+        }
+
+        .project-card .no-images::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.06), transparent);
+            animation: shimmer-sweep 4s ease infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer-sweep {
+            0% {
+                left: -100%;
+            }
+
+            60% {
+                left: 200%;
+            }
+
+            100% {
+                left: 200%;
+            }
         }
 
         /* Mobile adjustments for projects */
-        @media (max-width: 768px) {
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .project-images.three-images,
-            .project-images.many-images {
-                grid-template-columns: repeat(2, 1fr);
+        @media (max-width: 640px) {
+            .project-images {
+                height: 200px;
             }
         }
 
@@ -1022,11 +1158,41 @@
         }
 
         .contact-form {
-            background: var(--surface);
-            padding: 36px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            backdrop-filter: blur(20px);
+            background: rgba(11, 19, 43, 0.45);
+            padding: 40px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 107, 0, 0.18);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            box-shadow: 0 8px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.04), transparent);
+            animation: form-shimmer 6s ease infinite;
+            pointer-events: none;
+        }
+
+        @keyframes form-shimmer {
+            0% {
+                left: -100%;
+            }
+
+            50% {
+                left: 200%;
+            }
+
+            100% {
+                left: 200%;
+            }
         }
 
         .form-row {
@@ -1130,10 +1296,20 @@
 
         /* ─── FOOTER ─── */
         footer {
-            padding: 44px 5%;
+            padding: 50px 5% 44px;
             background: var(--deep-black);
-            border-top: 1px solid var(--border);
             text-align: center;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 5%, var(--neon-orange) 50%, transparent 95%);
         }
 
         .footer-inner {
@@ -1143,23 +1319,24 @@
 
         .footer-brand {
             font-family: 'Cabinet Grotesk', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 800;
             color: var(--neon-orange);
             margin-bottom: 6px;
+            letter-spacing: -0.01em;
         }
 
         .footer-tagline {
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 22px;
+            margin-bottom: 24px;
         }
 
         .socials {
             display: flex;
             gap: 12px;
             justify-content: center;
-            margin: 16px 0;
+            margin: 18px 0;
         }
 
         .socials a {
@@ -1172,7 +1349,7 @@
             background: var(--surface);
             border: 1px solid var(--border);
             color: var(--text-muted);
-            transition: all 0.28s ease;
+            transition: all 0.32s cubic-bezier(.2, .8, .2, 1);
             font-size: 1rem;
         }
 
@@ -1180,14 +1357,14 @@
             background: var(--neon-orange);
             border-color: var(--neon-orange);
             color: var(--pure-white);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.3);
+            transform: translateY(-5px) rotate(-5deg) scale(1.1);
+            box-shadow: 0 10px 24px rgba(255, 107, 0, 0.35);
         }
 
         .footer-copy {
             font-size: 0.8rem;
             color: rgba(240, 237, 232, 0.35);
-            margin-top: 18px;
+            margin-top: 20px;
             letter-spacing: 0.02em;
         }
 
@@ -1680,8 +1857,9 @@
                 <span class="name">Ankush Sharma</span>
                 <span class="role">Backend Developer</span>
             </h1>
-            <p class="hero-desc">Building <strong>scalable APIs</strong>, <strong>microservices</strong>, and deploying
-                reliable web server infrastructure.</p>
+            <p class="hero-desc">Building <span class="typing-wrapper"><span class="typing-text"
+                        id="typingText">Scalable APIs</span></span>
+                and deploying reliable web server infrastructure.</p>
             <div class="cta">
                 <a class="btn btn-primary" href="#contact">
                     <i class="fa-solid fa-paper-plane"></i>
@@ -1745,7 +1923,6 @@
                             <span class="tool-pill">Postman</span>
                             <span class="tool-pill">Git / GitHub</span>
                             <span class="tool-pill">EJS</span>
-                            <span class="tool-pill">PostgreSQL</span>
                             <span class="tool-pill">Node.js</span>
                             <span class="tool-pill">MongoDB</span>
                         </div>
@@ -1777,10 +1954,8 @@
                         <h4>Database & API</h4>
                         <div class="skill-tags">
                             <span class="skill-tag">MongoDB</span>
-                            <span class="skill-tag">PostgreSQL</span>
                             <span class="skill-tag">API Integration</span>
                             <span class="skill-tag">Data Modeling</span>
-                            <span class="skill-tag">GraphQL</span>
                         </div>
                     </div>
                     <div class="skill-category reveal">
@@ -1814,55 +1989,75 @@
                         <div class="project-card reveal">
 
                             <% if(project.urls && project.urls.length> 0){ %>
-
-                                <div class="project-images">
-
-                                    <% project.urls.forEach((img)=>{ %>
-
-                                        <div class="project-image-wrapper">
-                                            <img src="<%= img %>" loading="lazy">
-                                        </div>
-
-                                        <% }) %>
-
-                                </div>
-
-                                <% } %>
-
-                                    <div class="project-content">
-
-                                        <h3>
-                                            <%= project.projectname %>
-                                        </h3>
-
-                                        <p>
-                                            <%= project.description %>
-                                        </p>
-
-                                        <div class="project-links"
-                                            style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-                                            <% if(project.githubLink && project.githubLink.trim() !=='' ) { %>
-                                                <a href="<%= project.githubLink %>" target="_blank"
-                                                    rel="noopener noreferrer" class="project-link-btn"
-                                                    style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,107,0,0.3);background:rgba(255,107,0,0.06);color:var(--neon-orange);font-size:0.82rem;font-weight:600;transition:all 0.25s ease;text-decoration:none;"
-                                                    onmouseover="this.style.background='var(--neon-orange)';this.style.color='#fff'"
-                                                    onmouseout="this.style.background='rgba(255,107,0,0.06)';this.style.color='var(--neon-orange)'">
-                                                    <i class="fa-brands fa-github"></i> Source Code
-                                                </a>
+                                <% let galleryClass='one-image' ; if(project.urls.length===2) galleryClass='two-images'
+                                    ; else if(project.urls.length===3) galleryClass='three-images' ; else
+                                    if(project.urls.length> 3) galleryClass = 'many-images';
+                                    %>
+                                    <div class="project-images <%= galleryClass %>">
+                                        <% project.urls.forEach((img, idx)=> { %>
+                                            <% if(idx < 3 || (project.urls.length===4 && idx < 4)) { %>
+                                                <div
+                                                    class="project-image-wrapper <%= (idx === 3 && project.urls.length > 4) ? 'has-more' : '' %>">
+                                                    <img src="<%= img %>" loading="lazy"
+                                                        onerror="this.src='https://via.placeholder.com/400x225?text=Project+Image'">
+                                                    <% if(idx===2 && project.urls.length> 3 && galleryClass ===
+                                                        'three-images') { %>
+                                                        <div class="more-images-overlay">+<%= project.urls.length - 3 %>
+                                                        </div>
+                                                        <% } else if(idx===3 && project.urls.length> 4) { %>
+                                                            <div class="more-images-overlay">+<%= project.urls.length -
+                                                                    4 %>
+                                                            </div>
+                                                            <% } %>
+                                                </div>
                                                 <% } %>
-                                                    <% if(project.workingLink && project.workingLink.trim() !=='' ) { %>
-                                                        <a href="<%= project.workingLink %>" target="_blank"
+                                                    <% }) %>
+                                    </div>
+                                    <% } else { %>
+                                        <div class="no-images">
+                                            <i class="fa-solid fa-image fa-2x"></i>
+                                            <p>No preview available</p>
+                                        </div>
+                                        <% } %>
+
+                                            <div class="project-content"
+                                                style="flex:1; display:flex; flex-direction:column;">
+
+                                                <h3>
+                                                    <%= project.projectname %>
+                                                </h3>
+
+                                                <p>
+                                                    <%= project.description %>
+                                                </p>
+
+                                                <div class="project-links"
+                                                    style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+                                                    <% if(project.githubLink && project.githubLink.trim() !=='' ) { %>
+                                                        <a href="<%= project.githubLink %>" target="_blank"
                                                             rel="noopener noreferrer" class="project-link-btn"
-                                                            style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--neon-orange);color:#fff;font-size:0.82rem;font-weight:600;transition:all 0.25s ease;text-decoration:none;border:1px solid var(--neon-orange);"
-                                                            onmouseover="this.style.background='transparent';this.style.color='var(--neon-orange)'"
-                                                            onmouseout="this.style.background='var(--neon-orange)';this.style.color='#fff'">
-                                                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Live
-                                                            Demo
+                                                            style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,107,0,0.3);background:rgba(255,107,0,0.06);color:var(--neon-orange);font-size:0.82rem;font-weight:600;transition:all 0.25s ease;text-decoration:none;"
+                                                            onmouseover="this.style.background='var(--neon-orange)';this.style.color='#fff'"
+                                                            onmouseout="this.style.background='rgba(255,107,0,0.06)';this.style.color='var(--neon-orange)'">
+                                                            <i class="fa-brands fa-github"></i> Source Code
                                                         </a>
                                                         <% } %>
-                                        </div>
+                                                            <% if(project.workingLink && project.workingLink.trim()
+                                                                !=='' ) { %>
+                                                                <a href="<%= project.workingLink %>" target="_blank"
+                                                                    rel="noopener noreferrer" class="project-link-btn"
+                                                                    style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--neon-orange);color:#fff;font-size:0.82rem;font-weight:600;transition:all 0.25s ease;text-decoration:none;border:1px solid var(--neon-orange);"
+                                                                    onmouseover="this.style.background='transparent';this.style.color='var(--neon-orange)'"
+                                                                    onmouseout="this.style.background='var(--neon-orange)';this.style.color='#fff'">
+                                                                    <i
+                                                                        class="fa-solid fa-arrow-up-right-from-square"></i>
+                                                                    Live
+                                                                    Demo
+                                                                </a>
+                                                                <% } %>
+                                                </div>
 
-                                    </div>
+                                            </div>
 
                         </div>
 
@@ -2202,6 +2397,39 @@
             t.style.animation = 'none';
             requestAnimationFrame(() => { t.style.animation = ''; });
         });
+
+        // ─── HERO TYPING ANIMATION ───
+        (function () {
+            const el = document.getElementById('typingText');
+            if (!el) return;
+            const phrases = ['Scalable APIs', 'Microservices', 'Server Deployments', 'Backend Systems'];
+            let phraseIdx = 0, charIdx = phrases[0].length, isDeleting = true;
+            let typeSpeed = 80;
+
+            function tick() {
+                const current = phrases[phraseIdx];
+                if (isDeleting) {
+                    charIdx--;
+                    el.textContent = current.substring(0, charIdx);
+                    typeSpeed = 40;
+                    if (charIdx === 0) {
+                        isDeleting = false;
+                        phraseIdx = (phraseIdx + 1) % phrases.length;
+                        typeSpeed = 300;
+                    }
+                } else {
+                    charIdx++;
+                    el.textContent = phrases[phraseIdx].substring(0, charIdx);
+                    typeSpeed = 90;
+                    if (charIdx === phrases[phraseIdx].length) {
+                        isDeleting = true;
+                        typeSpeed = 2000;
+                    }
+                }
+                setTimeout(tick, typeSpeed);
+            }
+            setTimeout(tick, 2500);
+        })();
     </script>
 </body>
 

@@ -602,6 +602,111 @@
                 margin-top: 10px;
             }
         }
+
+        /* ─── PROJECT MANAGEMENT ─── */
+        .project-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .project-item:hover {
+            border-color: var(--border-hover);
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        .project-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .project-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .action-btn.edit:hover {
+            background: var(--orange-glow);
+            color: var(--neon-orange);
+            border-color: var(--neon-orange);
+        }
+
+        .action-btn.delete:hover {
+            background: rgba(255, 50, 50, 0.1);
+            color: #ff7070;
+            border-color: rgba(255, 50, 50, 0.4);
+        }
+
+        /* ─── MODAL ─── */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark-blue);
+            border: 1px solid var(--border-hover);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            opacity: 0.5;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -695,7 +800,7 @@
                     style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;">
                     <div
                         style="font-family:'Cabinet Grotesk',sans-serif;font-size:2rem;font-weight:800;color:var(--neon-orange);line-height:1;">
-                        ∞
+                        <%= projects ? projects.length : 0 %>
                     </div>
                     <div
                         style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:6px;">
@@ -723,6 +828,58 @@
                         Logout
                     </a>
                 </div>
+            </div>
+        </div>
+
+        <!-- Project List Panel -->
+        <div class="panel" style="grid-column: 1 / -1; animation-delay: 0.12s;">
+            <div class="panel-title">
+                <div class="panel-icon"><i class="fa-solid fa-list-check"></i></div>
+                Manage Projects
+                <% if (projects && projects.length> 0) { %>
+                    <span class="messages-count">
+                        <%= projects.length %>
+                    </span>
+                    <% } %>
+            </div>
+
+            <div class="project-list">
+                <% if (projects && projects.length> 0) { %>
+                    <% projects.forEach(p=> { %>
+                        <div class="project-item">
+                            <div class="project-info">
+                                <img src="<%= p.urls && p.urls.length > 0 ? p.urls[0] : 'https://via.placeholder.com/50' %>"
+                                    class="project-thumb" onerror="this.src='https://via.placeholder.com/50'">
+                                <div>
+                                    <div style="font-weight:700; font-size:0.95rem;">
+                                        <%= p.projectname %>
+                                    </div>
+                                    <div style="font-size:0.75rem; color:var(--text-muted);">
+                                        <%= p.description.substring(0, 50) %>...
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-actions">
+                                <button class="action-btn edit"
+                                    onclick="openEditModal('<%= p._id %>', '<%= p.projectname %>', '<%= p.description %>', '<%= p.urls && p.urls.length > 0 ? p.urls[0] : '' %>', '<%= p.githubLink %>', '<%= p.workingLink %>')"
+                                    title="Edit">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <form action="/admin-panel/delete-project/<%= p._id %>" method="POST"
+                                    style="display:inline;" onsubmit="return confirm('Delete this project?')">
+                                    <button class="action-btn delete" type="submit" title="Delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <% }) %>
+                            <% } else { %>
+                                <div class="no-messages">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                    <p>No projects found. Add your first one above!</p>
+                                </div>
+                                <% } %>
             </div>
         </div>
 
@@ -756,6 +913,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <form action="/admin-panel/delete-message/<%= message._id %>" method="POST"
+                                    onsubmit="return confirm('Delete this message?')">
+                                    <button class="action-btn delete" type="submit" title="Delete">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </form>
                             </div>
                             <div class="message-body">
                                 <%= message.message %>
@@ -771,6 +934,42 @@
                     <% } %>
         </div>
 
+    </div>
+
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></div>
+            <div class="panel-title">
+                <div class="panel-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+                Edit Project
+            </div>
+            <form id="editForm" method="POST">
+                <div class="form-control">
+                    <label for="edit_projectname">Project Name</label>
+                    <input id="edit_projectname" name="projectname" type="text" required />
+                </div>
+                <div class="form-control">
+                    <label for="edit_description">Description</label>
+                    <textarea id="edit_description" name="description" required></textarea>
+                </div>
+                <div class="form-control">
+                    <label for="edit_urls">Image URL</label>
+                    <input id="edit_urls" name="urls" type="text" />
+                </div>
+                <div class="form-control">
+                    <label for="edit_githubLink">GitHub Link</label>
+                    <input id="edit_githubLink" name="githubLink" type="text" required />
+                </div>
+                <div class="form-control">
+                    <label for="edit_workingLink">Working Link</label>
+                    <input id="edit_workingLink" name="workingLink" type="text" />
+                </div>
+                <button class="submit" type="submit">Save Changes</button>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -813,6 +1012,31 @@
                 this.appendChild(ripple);
                 setTimeout(() => ripple.remove(), 600);
             });
+        });
+
+        // Modal Logic
+        const editModal = document.getElementById('editModal');
+        const editForm = document.getElementById('editForm');
+
+        function openEditModal(id, name, desc, url, github, working) {
+            document.getElementById('edit_projectname').value = name;
+            document.getElementById('edit_description').value = desc;
+            document.getElementById('edit_urls').value = url;
+            document.getElementById('edit_githubLink').value = github;
+            document.getElementById('edit_workingLink').value = working;
+            editForm.action = `/admin-panel/update/${id}`;
+            editModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEditModal() {
+            editModal.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close on escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && editModal.classList.contains('open')) closeEditModal();
         });
     </script>
 </body>
