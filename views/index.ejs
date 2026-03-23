@@ -793,10 +793,11 @@
             box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
         }
 
-        /* ─── PROJECTS ─── */
+        /* ─── PROJECTS (Accordion Slider) ─── */
         #projects {
             background: linear-gradient(180deg, var(--deep-black) 0%, var(--dark-blue) 50%, var(--deep-black) 100%);
             position: relative;
+            overflow: hidden;
         }
 
         #projects::before {
@@ -809,253 +810,273 @@
             background: linear-gradient(90deg, transparent, var(--neon-orange), transparent);
         }
 
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
-            gap: 30px;
-            margin-top: 48px;
-        }
-
-        .project-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--card-radius);
-            padding: 0;
-            overflow: hidden;
-            transition: all .4s cubic-bezier(.2, .8, .2, 1);
-            position: relative;
+        .accordion-slider {
             display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-orange), #ff9d4d, transparent);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.5s ease;
-            z-index: 1;
-        }
-
-        .project-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--border-hover);
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border-hover), 0 0 30px rgba(255, 107, 0, 0.08);
-        }
-
-        .project-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        /* Project images gallery */
-        .project-images {
-            width: 100%;
-            height: 240px;
-            display: grid;
-            gap: 2px;
-            background: var(--border);
-            border-bottom: 1px solid var(--border);
+            height: 520px;
+            margin-top: 48px;
+            border-radius: 16px;
             overflow: hidden;
+            border: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.4);
         }
 
-        .project-images.one-image {
-            grid-template-columns: 1fr;
-        }
-
-        .project-images.two-images {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .project-images.three-images {
-            grid-template-columns: 1.5fr 1fr;
-            grid-template-rows: 1fr 1fr;
-        }
-
-        .project-images.three-images .project-image-wrapper:first-child {
-            grid-row: span 2;
-        }
-
-        .project-images.many-images {
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-        }
-
-        .project-images.many-images .project-image-wrapper:first-child {
-            grid-column: span 2;
-        }
-
-        .project-image-wrapper {
-            width: 100%;
-            height: 100%;
+        .accord-panel {
+            position: relative;
+            flex: 0.6;
             overflow: hidden;
-            background: rgba(0, 0, 0, 0.3);
             cursor: pointer;
+            transition: flex 0.6s cubic-bezier(.4, 0, .2, 1);
+            border-right: 1px solid rgba(255, 107, 0, 0.08);
         }
 
-        .project-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-            display: block;
-            transition: transform 0.4s ease;
+        .accord-panel:last-child {
+            border-right: none;
         }
 
-        .project-image-wrapper:hover img {
-            transform: scale(1.05);
+        .accord-panel.active {
+            flex: 4;
+            cursor: default;
         }
 
-        /* More images indicator */
-        .more-images-overlay {
+        /* Background image */
+        .accord-bg {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(4px);
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.8s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .accord-panel.active .accord-bg {
+            transform: scale(1.03);
+        }
+
+        .accord-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.7) 100%);
+            transition: background 0.5s ease;
+        }
+
+        .accord-panel:not(.active) .accord-bg::after {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Collapsed state: rotated name + number strip */
+        .accord-collapsed {
+            position: absolute;
+            inset: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            color: var(--off-white);
-            font-family: 'Cabinet Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .project-image-wrapper.has-more:hover .more-images-overlay {
+            justify-content: space-between;
+            padding: 24px 0 20px;
+            z-index: 2;
             opacity: 1;
+            transition: opacity 0.35s ease 0.1s;
         }
 
-        /* Project content */
-        .project-content {
-            padding: 24px 26px;
+        .accord-panel.active .accord-collapsed {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
         }
 
-        .project-card h3 {
+        .accord-name {
+            writing-mode: vertical-lr;
+            text-orientation: mixed;
             font-family: 'Cabinet Grotesk', sans-serif;
             font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 12px;
             color: var(--off-white);
-            letter-spacing: -0.02em;
-        }
-
-        .project-card p {
-            color: var(--text-muted);
-            font-size: 0.92rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .project-link {
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-height: 80%;
+            flex: 1;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-            font-size: 0.88rem;
+            padding: 10px 0;
         }
 
-        .project-link span {
-            color: var(--text-muted);
-            font-weight: 500;
+        .accord-number {
+            font-family: 'Cabinet Grotesk', serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.45);
+            letter-spacing: 0.05em;
+            font-style: italic;
         }
 
-        .project-link a {
-            color: var(--neon-orange);
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s ease;
-            padding: 4px 12px;
-            border-radius: 999px;
-            background: var(--orange-soft);
-            border: 1px solid var(--border);
-        }
-
-        .project-link a::after {
-            content: '→';
-            font-size: 1rem;
-            transition: transform 0.2s ease;
-        }
-
-        .project-link a:hover {
-            background: var(--neon-orange);
-            color: var(--pure-white);
-            border-color: var(--neon-orange);
-            transform: translateX(2px);
-        }
-
-        .project-link a:hover::after {
-            transform: translateX(3px);
-        }
-
-        /* No images fallback */
-        .project-card .no-images {
-            width: 100%;
-            height: 240px;
+        /* Expanded state: content overlay */
+        .accord-expanded {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.06) 0%, rgba(11, 19, 43, 0.6) 50%, rgba(255, 107, 0, 0.03) 100%);
-            border-bottom: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-card .no-images i {
-            font-size: 2rem;
-            opacity: 0.3;
-            color: var(--neon-orange);
-        }
-
-        .project-card .no-images::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.06), transparent);
-            animation: shimmer-sweep 4s ease infinite;
+            justify-content: flex-end;
+            padding: 40px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
             pointer-events: none;
         }
 
-        @keyframes shimmer-sweep {
-            0% {
-                left: -100%;
-            }
-
-            60% {
-                left: 200%;
-            }
-
-            100% {
-                left: 200%;
-            }
+        .accord-panel.active .accord-expanded {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+            transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
         }
 
-        /* Mobile adjustments for projects */
-        @media (max-width: 640px) {
-            .project-images {
-                height: 200px;
-            }
+        .accord-big-number {
+            font-family: 'Cabinet Grotesk', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.12);
+            font-style: italic;
+            position: absolute;
+            bottom: 30px;
+            left: 40px;
+            line-height: 1;
+            z-index: 1;
         }
 
-        @media (max-width: 480px) {
-            .project-images {
-                grid-template-columns: 1fr !important;
+        .accord-title {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+            font-weight: 800;
+            color: var(--off-white);
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .accord-desc {
+            font-size: 0.92rem;
+            color: rgba(240, 237, 232, 0.75);
+            line-height: 1.6;
+            max-width: 500px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .accord-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .accord-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .accord-link-btn.source {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--off-white);
+        }
+
+        .accord-link-btn.source:hover {
+            background: var(--off-white);
+            color: var(--deep-black);
+            border-color: var(--off-white);
+        }
+
+        .accord-link-btn.live {
+            background: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+            color: var(--pure-white);
+        }
+
+        .accord-link-btn.live:hover {
+            background: transparent;
+            color: var(--neon-orange);
+        }
+
+        /* Hover glow on collapsed */
+        .accord-panel:not(.active):hover {
+            background: rgba(255, 107, 0, 0.03);
+        }
+
+        .accord-panel:not(.active):hover .accord-name {
+            color: var(--neon-orange);
+        }
+
+        /* No image fallback */
+        .accord-no-img {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.08) 0%, rgba(11, 19, 43, 0.8) 50%, rgba(255, 107, 0, 0.04) 100%);
+        }
+
+        /* ─── ACCORDION MOBILE ─── */
+        @media (max-width: 768px) {
+            .accordion-slider {
+                flex-direction: column;
+                height: auto;
+                border-radius: 14px;
+            }
+
+            .accord-panel {
+                flex: none !important;
+                height: 70px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 107, 0, 0.08);
+                transition: height 0.5s cubic-bezier(.4, 0, .2, 1);
+            }
+
+            .accord-panel.active {
+                height: 420px;
+            }
+
+            .accord-collapsed {
+                flex-direction: row;
+                padding: 0 20px;
+                align-items: center;
+            }
+
+            .accord-name {
+                writing-mode: horizontal-tb;
+                text-orientation: initial;
+                max-height: none;
+                font-size: 1rem;
+                padding: 0;
+            }
+
+            .accord-number {
+                font-size: 0.9rem;
+            }
+
+            .accord-expanded {
+                padding: 24px;
+            }
+
+            .accord-big-number {
+                font-size: 2.5rem;
+                bottom: 20px;
+                left: 24px;
             }
         }
 
@@ -1973,100 +1994,6 @@
             </div>
         </section>
 
-        <section id="projects">
-            <div class="container">
-
-                <div class="section-header reveal">
-                    <span class="section-tag">What I've built</span>
-                    <h2 class="section-title">Projects</h2>
-                    <p class="section-sub">Recent work and personal projects</p>
-                </div>
-
-                <div class="projects-grid">
-
-                    <% projects.forEach((project)=> { %>
-
-                        <div class="project-card reveal">
-
-                            <% if(project.urls && project.urls.length> 0){ %>
-                                <% let galleryClass='one-image' ; if(project.urls.length===2) galleryClass='two-images'
-                                    ; else if(project.urls.length===3) galleryClass='three-images' ; else
-                                    if(project.urls.length> 3) galleryClass = 'many-images';
-                                    %>
-                                    <div class="project-images <%= galleryClass %>">
-                                        <% project.urls.forEach((img, idx)=> { %>
-                                            <% if(idx < 3 || (project.urls.length===4 && idx < 4)) { %>
-                                                <div
-                                                    class="project-image-wrapper <%= (idx === 3 && project.urls.length > 4) ? 'has-more' : '' %>">
-                                                    <img src="<%= img %>" loading="lazy"
-                                                        onerror="this.src='https://via.placeholder.com/400x225?text=Project+Image'">
-                                                    <% if(idx===2 && project.urls.length> 3 && galleryClass ===
-                                                        'three-images') { %>
-                                                        <div class="more-images-overlay">+<%= project.urls.length - 3 %>
-                                                        </div>
-                                                        <% } else if(idx===3 && project.urls.length> 4) { %>
-                                                            <div class="more-images-overlay">+<%= project.urls.length -
-                                                                    4 %>
-                                                            </div>
-                                                            <% } %>
-                                                </div>
-                                                <% } %>
-                                                    <% }) %>
-                                    </div>
-                                    <% } else { %>
-                                        <div class="no-images">
-                                            <i class="fa-solid fa-image fa-2x"></i>
-                                            <p>No preview available</p>
-                                        </div>
-                                        <% } %>
-
-                                            <div class="project-content"
-                                                style="flex:1; display:flex; flex-direction:column;">
-
-                                                <h3>
-                                                    <%= project.projectname %>
-                                                </h3>
-
-                                                <p>
-                                                    <%= project.description %>
-                                                </p>
-
-                                                <div class="project-links"
-                                                    style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-                                                    <% if(project.githubLink && project.githubLink.trim() !=='' ) { %>
-                                                        <a href="<%= project.githubLink %>" target="_blank"
-                                                            rel="noopener noreferrer" class="project-link-btn"
-                                                            style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,107,0,0.3);background:rgba(255,107,0,0.06);color:var(--neon-orange);font-size:0.82rem;font-weight:600;transition:all 0.25s ease;text-decoration:none;"
-                                                            onmouseover="this.style.background='var(--neon-orange)';this.style.color='#fff'"
-                                                            onmouseout="this.style.background='rgba(255,107,0,0.06)';this.style.color='var(--neon-orange)'">
-                                                            <i class="fa-brands fa-github"></i> Source Code
-                                                        </a>
-                                                        <% } %>
-                                                            <% if(project.workingLink && project.workingLink.trim()
-                                                                !=='' ) { %>
-                                                                <a href="<%= project.workingLink %>" target="_blank"
-                                                                    rel="noopener noreferrer" class="project-link-btn"
-                                                                    style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--neon-orange);color:#fff;font-size:0.82rem;font-weight:600;transition:all 0.25s ease;text-decoration:none;border:1px solid var(--neon-orange);"
-                                                                    onmouseover="this.style.background='transparent';this.style.color='var(--neon-orange)'"
-                                                                    onmouseout="this.style.background='var(--neon-orange)';this.style.color='#fff'">
-                                                                    <i
-                                                                        class="fa-solid fa-arrow-up-right-from-square"></i>
-                                                                    Live
-                                                                    Demo
-                                                                </a>
-                                                                <% } %>
-                                                </div>
-
-                                            </div>
-
-                        </div>
-
-                        <% }) %>
-
-                </div>
-            </div>
-        </section>
-
         <section id="services">
             <div class="container">
                 <div class="section-header reveal">
@@ -2099,6 +2026,74 @@
                 </div>
             </div>
         </section>
+
+        <section id="projects">
+            <div class="container">
+
+                <div class="section-header reveal">
+                    <span class="section-tag">What I've built</span>
+                    <h2 class="section-title">Projects</h2>
+                    <p class="section-sub">Recent work and personal projects</p>
+                </div>
+
+                <div class="accordion-slider reveal">
+                    <% projects.forEach((project, idx)=> { %>
+                        <div class="accord-panel<%= idx === 0 ? ' active' : '' %>" data-index="<%= idx %>">
+
+                            <!-- Background image -->
+                            <% if(project.urls && project.urls.length> 0) { %>
+                                <div class="accord-bg" style="background-image: url('<%= project.urls[0] %>')"></div>
+                                <% } else { %>
+                                    <div class="accord-bg accord-no-img"></div>
+                                    <% } %>
+
+                                        <!-- Collapsed view: rotated name + number -->
+                                        <div class="accord-collapsed">
+                                            <div class="accord-name">
+                                                <%= project.projectname %>
+                                            </div>
+                                            <div class="accord-number">
+                                                <%= String(idx + 1).padStart(2, '0' ) %>"
+                                            </div>
+                                        </div>
+
+                                        <!-- Expanded view: full content -->
+                                        <div class="accord-expanded">
+                                            <div class="accord-big-number">
+                                                <%= String(idx + 1).padStart(2, '0' ) %>"
+                                            </div>
+                                            <div class="accord-title">
+                                                <%= project.projectname %>
+                                            </div>
+                                            <div class="accord-desc">
+                                                <%= project.description %>
+                                            </div>
+                                            <div class="accord-links">
+                                                <% if(project.githubLink && project.githubLink.trim() !=='' ) { %>
+                                                    <a href="<%= project.githubLink %>" target="_blank"
+                                                        rel="noopener noreferrer" class="accord-link-btn source">
+                                                        <i class="fa-brands fa-github"></i> Source Code
+                                                    </a>
+                                                    <% } %>
+                                                        <% if(project.workingLink && project.workingLink.trim() !=='' )
+                                                            { %>
+                                                            <a href="<%= project.workingLink %>" target="_blank"
+                                                                rel="noopener noreferrer" class="accord-link-btn live">
+                                                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                                                Live Demo
+                                                            </a>
+                                                            <% } %>
+                                            </div>
+                                        </div>
+
+                        </div>
+                        <% }) %>
+                </div>
+
+            </div>
+        </section>
+
+
 
         <section id="contact">
             <div class="container">
@@ -2397,6 +2392,21 @@
             t.style.animation = 'none';
             requestAnimationFrame(() => { t.style.animation = ''; });
         });
+
+        // ─── ACCORDION SLIDER ───
+        (function () {
+            const panels = document.querySelectorAll('.accord-panel');
+            if (!panels.length) return;
+            panels.forEach(panel => {
+                panel.addEventListener('click', function (e) {
+                    // Don't switch panels when clicking links
+                    if (e.target.closest('a')) return;
+                    if (this.classList.contains('active')) return;
+                    panels.forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        })();
 
         // ─── HERO TYPING ANIMATION ───
         (function () {
